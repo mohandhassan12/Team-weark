@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد السيلز</title>
+    <link rel="shortcut icon" href="logo5.png" type="image/x-icon">
+    <!-- إضافة Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+
+<script type="module">
+    // Import the functions you need from the SDKs you need
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+    // TODO: Add SDKs for Firebase products that you want to use
+    // https://firebase.google.com/docs/web/setup#available-libraries
+  
+    // Your web app's Firebase configuration
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+      apiKey: "AIzaSyBpcAxHT_MfOdi_SDHUm_1m08RmpWuDcZE",
+      authDomain: "team-warek.firebaseapp.com",
+      projectId: "team-warek",
+      storageBucket: "team-warek.firebasestorage.app",
+      messagingSenderId: "183422365249",
+      appId: "1:183422365249:web:ecc185e41a01a03af1a0c0",
+      measurementId: "G-E7S2B4MDN9"
+    };
+  
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
+      <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #4b0082;
+            text-align: center;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #4b0082;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #4b0082;
+            color: white;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #6a1b9a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .admin-only {
+            display: none;
+        }
+        button {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #4b0082;
+        }
+    </style>
+</head>
+<body>
+    <h1>داشبورد السيلز</h1>
+    <div class="nav-buttons">
+        <button onclick="location.href='home.html'">العودة للتسجيل</button>
+    </div>
+    
+    <button onclick="exportToExcel()">تحميل تقرير Excel</button>
+    
+    <h2>الخطوط اليومية</h2>
+    <table id="daily-lines-table">
+        <thead>
+            <tr>
+                <th>التاريخ</th>
+                <th>الخطوط</th>
+                <th>We Pay</th>
+                <th>ADSL</th>
+                <th>Fixed</th>
+                <th>Data</th>
+                <th>المستخدم</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button class="admin-only" onclick="clearOldEntries()">مسح البيانات الأقدم من 7 أيام</button>
+
+    <h2>مقارنة الإنجاز</h2>
+    <table id="comparison-table">
+        <thead>
+            <tr>
+                <th>المستخدم</th>
+                <th>المطلوب تحقيقه</th>
+                <th>ما تم تحقيقه</th>
+                <th>We Pay</th>
+                <th>ADSL</th>
+                <th>Fixed</th>
+                <th>Data</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <button class="admin-only" onclick="clearComparison()">مسح جدول المقارنة</button>
+    <script>
+    
+        async function loadData() {
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'home.html';
+                return;
+            }
+    
+            try {
+                let query = db.collection('salesData');
+                if (user.uid !== 'fr.mohannd.hassen') {
+                    query = query.where('user', '==', user.uid);
+                }
+    
+                const snapshot = await query.get();
+                const salesData = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    // تحويل Timestamp إلى تاريخ مقروء
+                    return {
+                        ...data,
+                        date: data.date?.toDate().toLocaleDateString('ar-EG') || 'بدون تاريخ',
+                    };
+                });
+    
+                // عرض البيانات اليومية
+                const isAdmin = user.uid === 'fr.mohannd.hassen';
+                const dailyLinesBody = document.querySelector("#daily-lines-table tbody");
+                
+                dailyLinesBody.innerHTML = salesData
+                    .filter(entry => isAdmin || entry.user === user.uid)
+                    .map(entry => `
+                        <tr>
+                            <td>${entry.date}</td>
+                            <td>${entry.lines}</td>
+                            <td>${entry.wePay || 0}</td>
+                            <td>${entry.adsl || 0}</td>
+                            <td>${entry.fixed || 0}</td>
+                            <td>${entry.data || 0}</td>
+                            <td>${entry.user}</td>
+                        </tr>
+                    `).join('');
+    
+                // تحديث جدول المقارنة
+                const comparisonBody = document.querySelector("#comparison-table tbody");
+                comparisonBody.innerHTML = '';
+                
+                const users = isAdmin 
+                    ? [...new Set(salesData.map(entry => entry.user))] 
+                    : [user.uid];
+    
+                users.forEach(userId => {
+                    const userData = salesData.filter(entry => entry.user === userId);
+                    const totals = userData.reduce((acc, entry) => ({
+                        lines: acc.lines + parseInt(entry.lines),
+                        wePay: acc.wePay + parseInt(entry.wePay || 0),
+                        adsl: acc.adsl + parseInt(entry.adsl || 0),
+                        fixed: acc.fixed + parseInt(entry.fixed || 0),
+                        data: acc.data + parseInt(entry.data || 0)
+                    }), {lines:0, wePay:0, adsl:0, fixed:0, data:0});
+    
+                    comparisonBody.innerHTML += `
+                        <tr>
+                            <td>${userId}</td>
+                            <td>${isAdmin ? '1000' : '500'}</td>
+                            <td>${totals.lines}</td>
+                            <td>${totals.wePay}</td>
+                            <td>${totals.adsl}</td>
+                            <td>${totals.fixed}</td>
+                            <td>${totals.data}</td>
+                        </tr>
+                    `;
+                });
+    
+                // إظهار الأزرار الإدارية
+                if (isAdmin) {
+                    document.querySelectorAll('.admin-only').forEach(btn => {
+                        btn.style.display = 'inline-block';
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('حدث خطأ في تحميل البيانات');
+            }
+        }
+    
+        // دوال الإدارة
+        async function clearOldEntries() {
+            if (!confirm("⚠️ هل تريد مسح البيانات الأقدم من 7 أيام؟")) return;
+            
+            try {
+                const cutoffDate = new Date();
+                cutoffDate.setDate(cutoffDate.getDate() - 7);
+                
+                const snapshot = await db.collection('salesData')
+                    .where('date', '<', cutoffDate)
+                    .get();
+    
+                const batch = db.batch();
+                snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                await batch.commit();
+                
+                alert('تم المسح بنجاح');
+                loadData();
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                alert('فشل في مسح البيانات');
+            }
+        }
+    
+        async function clearComparison() {
+            if (!confirm("⚠️ هل تريد مسح جميع البيانات نهائيًا؟")) return;
+            
+            try {
+                const snapshot = await db.collection('salesData').get();
+                const batch = db.batch();
+                snapshot.docs.forEach(doc => batch.delete(doc.ref));
+                await batch.commit();
+                
+                alert('تم مسح جميع البيانات');
+                loadData();
+            } catch (error) {
+                console.error('Error deleting data:', error);
+                alert('فشل في مسح البيانات');
+            }
+        }
+    
+        document.addEventListener("DOMContentLoaded", () => {
+            auth.onAuthStateChanged(user => {
+                if (user) loadData();
+                else window.location.href = 'home.html';
+            });
+        });
+    </script>
+</body>
+</html>

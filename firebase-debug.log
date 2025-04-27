@@ -1,0 +1,39 @@
+[debug] [2025-04-27T16:45:47.421Z] ----------------------------------------------------------------------
+[debug] [2025-04-27T16:45:47.425Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\dell\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --debug
+[debug] [2025-04-27T16:45:47.425Z] CLI Version:   14.2.1
+[debug] [2025-04-27T16:45:47.425Z] Platform:      win32
+[debug] [2025-04-27T16:45:47.425Z] Node Version:  v22.14.0
+[debug] [2025-04-27T16:45:47.426Z] Time:          Sun Apr 27 2025 19:45:47 GMT+0300 (Eastern European Summer Time)
+[debug] [2025-04-27T16:45:47.426Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2025-04-27T16:45:47.744Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2025-04-27T16:45:47.746Z] > authorizing via signed-in user (honda229204@gmail.com)
+[debug] [2025-04-27T16:45:47.966Z] java version "24" 2025-03-18
+
+[debug] [2025-04-27T16:45:47.967Z] Java(TM) SE Runtime Environment (build 24+36-3646)
+Java HotSpot(TM) 64-Bit Server VM (build 24+36-3646, mixed mode, sharing)
+
+[debug] [2025-04-27T16:45:47.991Z] Parsed Java major version: 24
+[info] i  emulators: Starting emulators: auth, firestore, database, hosting, storage {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, firestore, database, hosting, storage"}}
+[warn] !  hosting: The hosting emulator is configured but there is no hosting configuration. Have you run firebase init hosting? {"metadata":{"emulator":{"name":"hosting"},"message":"The hosting emulator is configured but there is no hosting configuration. Have you run \u001b[1mfirebase init hosting\u001b[22m?"}}
+[warn] !  firestore: Port 8080 is not open on localhost (127.0.0.1), could not start Firestore Emulator. {"metadata":{"emulator":{"name":"firestore"},"message":"Port 8080 is not open on localhost (127.0.0.1), could not start Firestore Emulator."}}
+[warn] !  firestore: To select a different host/port, specify that host/port in a firebase.json config file:
+      {
+        // ...
+        "emulators": {
+          "firestore": {
+            "host": "HOST",
+            "port": "PORT"
+          }
+        }
+      } {"metadata":{"emulator":{"name":"firestore"},"message":"To select a different host/port, specify that host/port in a firebase.json config file:\n      {\n        // ...\n        \"emulators\": {\n          \"firestore\": {\n            \"host\": \"\u001b[33mHOST\u001b[39m\",\n            \"port\": \"\u001b[33mPORT\u001b[39m\"\n          }\n        }\n      }"}}
+[debug] [2025-04-27T16:45:48.024Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-04-27T16:45:48.025Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-04-27T16:45:48.025Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-04-27T16:45:48.025Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-04-27T16:45:48.029Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2025-04-27T16:45:48.035Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[debug] [2025-04-27T16:45:48.040Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[error] 
+[error] Error: Could not start Firestore Emulator, port taken.

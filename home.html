@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        Team-Warek-Home</title>
+    <link rel="shortcut icon" href="Team-Warek-Logo.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles/style-home.css">
+</head>
+<body class="light-mode">
+    <!-- الهيدر -->
+    <div class="header">
+        <img src="Team-Warek-Logo.jpg" alt="Logo" class="logo">
+        <div class="welcome">مرحبًا، <span id="username"></span>!</div>
+        <a href="index.html"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+    </div>
+
+    <!-- روابط الصفحة -->
+    <div class="links-container">
+        <div class="link-card">
+            <i class="fa-solid fa-sim-card"></i>
+            <a href="daily-lines.html">daily-lines</a>
+        </div>
+        <div class="link-card">
+            <i class="fa-solid fa-cash-register"></i>
+            <a href="cash.html">cash-register</a>
+        </div>
+        <div class="link-card">
+            <i class="fa-solid fa-gauge"></i>
+            <a href="sales-dashboard.html">sales-dashboard</a>
+        </div>
+        <div class="link-card">
+            <i class="fa-solid fa-money-bill"></i>
+            <a href="cash-report.html">Cash-report</a>
+        </div>
+        <div class="link-card">
+            <i class="fas fa-building"></i>
+            <a href="branch-dashboard.html">branch-dashboard</a>
+        </div>
+        <div class="link-card">
+            <i class="fa-solid fa-file-pdf"></i>
+            <a href="pdf.html">All Pdf</a>
+        </div>
+        <div class="link-card">
+            <i class="fa-solid fa-file-lines"></i>
+            <a href="All info.html"> All info</a>
+        </div>
+    </div>
+ <!-- الفوتر -->
+ <footer class="footer">
+    <p>powered by mohand</p>
+</footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) window.location.href = 'index.html';
+            
+            document.getElementById('username').textContent = currentUser;
+            
+            if (currentUser === 'Mohand') {
+                document.getElementById('adminLink').style.display = 'block';
+            }
+        });
+
+    </script>
+</body>
+</html>

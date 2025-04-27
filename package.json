@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "firebase": "^11.6.1"
+  },
+  "name": "team-warek",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "div":"firebase emulators:start",
+    "start": "firebase serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+
+
+}

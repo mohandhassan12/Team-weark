@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALL pdf</title>
+    <link rel="shortcut icon" href="logo5.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* التنسيقات العامة */
+        :root {
+            --main-color: #6a1b9a;
+            --secondary-color: #9c27b0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Tahoma', sans-serif;
+            background: #f8f0ff;
+            line-height: 1.6;
+        }
+
+        /* الهيدر */
+        .header {
+            background: var(--main-color);
+            color: white;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            width: 120px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: 0.3s;
+        }
+
+        /* قسم النماذج */
+        .forms-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-bar {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        #searchInput {
+            width: 60%;
+            padding: 12px;
+            border: 2px solid var(--main-color);
+            border-radius: 25px;
+        }
+
+        .filter-buttons {
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .filter-btn {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        /* بطاقات النماذج */
+        .forms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            padding: 1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .form-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-icon {
+            font-size: 2rem;
+            color: var(--main-color);
+            margin-left: 1rem;
+        }
+
+        .download-btn {
+            display: block;
+            text-align: center;
+            background: var(--main-color);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 1rem;
+        }
+
+        /* فوتر */
+        .footer {
+            background: var(--main-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        /* تسجيل الدخول */
+        .login-container {
+            max-width: 400px;
+            margin: 5rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        /* رسالة البحث */
+        .no-results {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.2rem;
+            color: var(--main-color);
+        }
+
+        .no-results i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- الهيدر -->
+    <header class="header">
+        <nav class="navbar">
+            <img src="logo5.png" alt="Team Warek" class="logo">
+            <div class="nav-links">
+                <a href="home.html"><i class="fa-solid fa-house-user"></i></a>
+            
+            </div>
+        </nav>
+    </header>
+
+    <!-- قسم النماذج -->
+    <section class="forms-section" id="forms">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="ابحث عن نموذج...">
+            <button class="filter-btn" onclick="searchForms()">بحث</button>
+        </div>
+
+        <div class="filter-buttons">
+            <button class="filter-btn" onclick="filterForms('all')">الكل</button>
+            <button class="filter-btn" onclick="filterForms('mobile')">المحمول</button>
+            <button class="filter-btn" onclick="filterForms('landline')">الأرضي</button>
+            <button class="filter-btn"onclick="filterForms('Adsl')">Adsl</button>
+        </div>
+
+        <div class="forms-grid" id="formsContainer">
+            <!-- سيتم إضافة النماذج ديناميكيًا بواسطة الجافاسكريبت -->
+        </div>
+    </section>
+
+    <!-- الفوتر -->
+    <footer class="footer">
+        <p>powered by mohand</p>
+    </footer>
+
+    <script>
+        // بيانات النماذج
+        const forms = [
+            { 
+                title: "نموذج تقديم ارضي",
+                category: "landline",
+                size: "450KB",
+                link: "pdf/Fixed Forms.pdf"
+            },
+            {
+                title: "نموذج استبدال شريحه",
+                category: "mobile",
+                size: "320KB",
+                link: "pdf/نموذج إستبدال الشريحة.pdf"
+            },
+            {
+                title: "نموذج نقل ملكية خط محمول",
+                category:"mobile",
+                size: "265KB",
+                link: "pdf/استماره نقل ملكيه.pdf",
+            },
+            {
+                title: "اسال استلام نقديه",
+                category:"mobile",
+                size:"200KB",
+                link:"pdf/اسال استلام نقدسه.pdf",
+            },
+            {
+               title:"نموذج تعديل بيانات شخصيه",
+               category:"landline",
+               size:"150KB",
+               link:"pdf/نموزج تعديل بينات شخصيه.pdf",
+            },
+            {
+              title:"أﺣﻜﺎم وﺷﺮوط ﺧﺪﻣﺔ ﺧﻄﻮط اﻟﺘﻠﻴﻔﻮن المحمول ذات اﻟﺸﺮاﺋﺢ المدمجة" ,
+              category:"mobile",
+              size:"60KB",
+              link:"pdf/أﺣﻜﺎم وﺷﺮوط ﺧﺪﻣﺔ ﺧﻄﻮط اﻟﺘﻠﻴﻔﻮن المحمول ذات اﻟﺸﺮاﺋﺢ المدمجة.pdf",
+            },
+            {
+               title:"استماره NTRA للارضي الجديد",
+               category:"Adsl",
+               size:"50KB",
+               link:"pdf/استماره NTRA للارضي الجديد.pdf",
+            },
+            {
+                title:"استماره NTRA للارضي الحالي",
+               category:"Adsl",
+               size:"50KB",
+               link:"pdf/استماره NTRA للارضي الحالي.pdf",
+            },
+            {
+                title:"اضافه خط ارضي ع الوي جولد (تصحيح وضع)",
+                category:"landline",
+                size:"50KB",
+                link:"pdf/اضافه خط ارضي ع الوي جولد (تصحيح وضع).pdf",
+            },
+            {
+                title:"اضافه خط ارضي ع الوي جولد ",
+                category:"landline",
+                size:"50KB",
+                link:"pdf/اضافه خط ارضي ع الوي جولد.pdf",
+            },
+            {
+                title:"اقرار الغاء محفظه",
+                category:"mobile",
+                size:"45KB",
+                link:"pdf/اقرار الغاء محفظه.pdf",
+            },
+            {
+                title:"اقرار 12 شهر وي جولد",
+                category:"mobile",
+                size:"42KB",
+                link:"pdf/اقرار 12 شهر.pdf",
+            },
+            {
+               title:"اقرار ايقاف مؤقت لخط الفاتوره",
+               category:"mobile",
+               size:"35KB",
+               link:"pdf/اقرار ايقاف مؤقت لخط الفاتوره.pdf",
+            },
+            {
+                title:"اقرار عملاء الدبلوماسي",
+                category:"mobile",
+                size:"22KB",
+                link:"pdf/اقرار عملاء الدبلوماسي.pdf",
+            },
+            {
+                title:"طلب استغناء عن خط ارضي",
+                category:"landline",
+                size:"48KB",
+                link:"pdf/طلب استغناء عن خط ارضي.pdf",
+            },
+            {
+                title:"طلب الغاء MNP",
+                category:"mobile",
+                size:"45KB",
+                link:"pdf/طلب الغاء MNP..pdf",
+            },
+            {
+                title:"طب MNP",
+                category:"mobile",
+                size:"22KB",
+                link:"pdf/طب mnp.pdf",
+            },
+            {
+                title:"طلب الغاء انترنت",
+                category:"Adsl",
+                size:"35KB",
+                link:"pdf/طلب الغاء انترنت.pdf",
+            },
+            {
+                title:"طلب الغاء خط الفاتوره ",
+                category:"mobile",
+                size:"42KB",
+                link:"pdf/طلب الغاء خط الفاتوره.pdf",
+            },
+            {
+                title:"طلب نقل ارضي ",
+                category:"landline",
+                size:"48KB",
+                link:"pdf/طلب نقل ارضي 1.pdf",
+            },
+            {
+                title:"عقد تقديم خدمة المكالمات الترويجية لخطوط الأفراد",
+                category:"mobile",
+                size:"35KB",
+                link:"pdf/عقد تقديم خدمة المكالمات الترويجية لخطوط الأفراد.pdf",
+            },
+            {
+                title:"عقد غرامه النت الارضي",
+                category:"Adsl",
+                size:"35KB",
+                link:"pdf/عقد غرامه النت الارضي.pdf",
+            },
+            {
+                title:"فورمه اكتر من خط للعملاء الجدد",
+                category:"mobile",
+                size:"47KB",
+                link:"pdf/فورمه اكتر من خط للعملاء الجدد.pdf",
+            },
+            {
+                title:"اقرار الراوتر 50ج ",
+                category:"Adsl",
+                size:"35KB",
+                link:"pdf/اقرار الراوتر 50ج .pdf",
+            },
+        ];
+
+        // توليد النماذج تلقائيًا
+        function generateForms(category = 'all') {
+            const container = document.getElementById('formsContainer');
+            container.innerHTML = '';
+
+            forms.forEach(form => {
+                if (category === 'all' || form.category === category) {
+                    const card = `
+                        <div class="form-card">
+                            <div class="form-header">
+                                <i class="fas fa-file-pdf form-icon"></i>
+                                <h3>${form.title}</h3>
+                            </div>
+                            <p>الحجم: ${form.size}</p>
+                            <a href="${form.link}" class="download-btn" download>
+                                <i class="fas fa-download"></i> تحميل النموذج
+                            </a>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                }
+            });
+        }
+
+        // البحث والتصفية
+        function searchForms() {
+            const term = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.form-card h3');
+            let found = false;
+
+            cards.forEach(card => {
+                if (card.textContent.toLowerCase().includes(term)) {
+                    card.parentElement.parentElement.style.display = 'block';
+                    found = true;
+                } else {
+                    card.parentElement.parentElement.style.display = 'none';
+                }
+            });
+
+            if (!found) {
+                const container = document.getElementById('formsContainer');
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i class="fas fa-search"></i>
+                        <p>دور عدل</p>
+                    </div>
+                `;
+            }
+        }
+
+        function filterForms(category) {
+            generateForms(category);
+        }
+
+        // التهيئة الأولية
+        generateForms();
+    </script>
+</body>
+</html>

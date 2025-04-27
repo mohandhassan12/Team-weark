@@ -1,0 +1,106 @@
+body {
+    font-family: "Arial", sans-serif;
+    background-color: #f8f9fa; /* لون خلفية هادئ */
+    margin: 0;
+    padding: 0;
+    direction: rtl; /* دعم اللغة العربية */
+    text-align: center;
+}
+
+/* وسائل الاستعلام عن الوسائط لتحديد النطاقات المختلفة من أحجام الشاشة */
+@media (max-width: 768px) {
+    .data-entry-container {
+        width: 95%;
+        padding: 20px 25px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    input, select {
+        font-size: 15px;
+    }
+
+    button {
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .data-entry-container {
+        width: 100%;
+        padding: 15px 20px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    input, select {
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+    }
+}
+
+.data-entry-container {
+    background-color: #fff;
+    width: 90%;
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* تأثير الظل */
+    border: 2px solid #6A0DAD; /* تحديد بلون الموف */
+}
+
+h2 {
+    font-size: 24px;
+    color: #6A0DAD; /* لون موف */
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* تباعد بين الحقول */
+}
+
+label {
+    font-size: 16px;
+    color: #333;
+    text-align: right; /* محاذاة النص لليمين */
+}
+
+input, select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s; /* تأثير عند التركيز */
+}
+
+input:focus, select:focus {
+    border-color: #6A0DAD;
+    outline: none;
+}
+
+button {
+    padding: 10px;
+    background-color: #6A0DAD;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* تأثير عند المرور */
+}
+
+button:hover {
+    background-color: #580b9b; /* لون أغمق عند المرور */
+}

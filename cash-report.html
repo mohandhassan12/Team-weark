@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كشف الحركات النقدية</title>
+    <link rel="shortcut icon" href="logo5.png" type="image/x-icon">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyBpcAxHT_MfOdi_SDHUm_1m08RmpWuDcZE",
+          authDomain: "team-warek.firebaseapp.com",
+          projectId: "team-warek",
+          storageBucket: "team-warek.appspot.com",
+          messagingSenderId: "183422365249",
+          appId: "1:183422365249:web:ecc185e41a01a03af1a0c0",
+          measurementId: "G-E7S2B4MDN9"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        
+        // Initialize Firebase services
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // دالة التصدير إلى إكسل
+        async function exportToExcel() {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('يجب تسجيل الدخول أولاً');
+                return;
+            }
+
+            try {
+                let query = db.collection('cashEntries');
+                if (user.uid !== 'fr.mohannd.hassen') {
+                    query = query.where('user', '==', user.uid);
+                }
+
+                const snapshot = await query.get();
+                const excelData = snapshot.docs.map(doc => ({
+                    "التاريخ": new Date(doc.data().timestamp).toLocaleString('ar-EG'),
+                    "BSS": doc.data().bss || 0,
+                    "إضافة We Pay": doc.data().wePayAdded || 0,
+                    "سحب We Pay": doc.data().wePayWithdrawn || 0,
+                    "سحب Visa": doc.data().visaWithdrawn || 0,
+                    "Refund": doc.data().refund || 0,
+                    "سحوبات أخرى": doc.data().otherWithdrawn || 0,
+                    "الإجمالي": doc.data().total || 0,
+                    "المستخدم": doc.data().user
+                }));
+
+                // إنشاء ملف إكسل
+                const worksheet = XLSX.utils.json_to_sheet(excelData);
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "التقرير النقدي");
+                
+                // تنزيل الملف
+                const fileName = `كشف_نقدية_${user.uid}_${new Date().toISOString().split('T')[0]}.xlsx`;
+                XLSX.writeFile(workbook, fileName);
+            } catch (error) {
+                console.error('Error exporting data:', error);
+                alert('حدث خطأ أثناء تصدير البيانات');
+            }
+        }
+
+        // تحميل البيانات عند فتح الصفحة
+        async function loadData() {
+            const user = auth.currentUser;
+            if (!user) {
+                alert('يجب تسجيل الدخول أولاً');
+                window.location.href = 'home.html';
+                return;
+            }
+
+            try {
+                let query = db.collection('cashEntries');
+                if (user.uid !== 'fr.mohannd.hassen') {
+                    query = query.where('user', '==', user.uid);
+                }
+
+                const snapshot = await query.get();
+                const entries = snapshot.docs.map(doc => doc.data());
+
+                // عرض البيانات في الجدول
+                const tbody = document.querySelector('#cashTable tbody');
+                tbody.innerHTML = entries.map(entry => `
+                    <tr>
+                        <td>${new Date(entry.timestamp).toLocaleString('ar-EG')}</td>
+                        <td>${entry.bss || 0}</td>
+                        <td>${entry.wePayAdded || 0}</td>
+                        <td>${entry.wePayWithdrawn || 0}</td>
+                        <td>${entry.visaWithdrawn || 0}</td>
+                        <td>${entry.refund || 0}</td>
+                        <td>${entry.otherWithdrawn || 0}</td>
+                        <td>${entry.total || 0}</td>
+                        <td>${entry.user}</td>
+                    </tr>
+                `).join('');
+
+                // إضافة الإجمالي للمدير
+                if (user.uid === 'fr.mohannd.hassen') {
+                    const total = entries.reduce((sum, entry) => sum + parseFloat(entry.total || 0), 0);
+                    tbody.innerHTML += `
+                        <tr style="background:#f0f0f0; font-weight:bold">
+                            <td colspan="7">الإجمالي العام</td>
+                            <td>${total.toFixed(2)}</td>
+                            <td></td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+                alert('حدث خطأ أثناء تحميل البيانات');
+            }
+        }
+
+        // تأكد من أن المستخدم مسجل الدخول قبل تحميل الصفحة
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                loadData();
+            } else {
+                window.location.href = 'home.html';
+            }
+        });
+
+        // جعل الدوال متاحة عالمياً
+        window.exportToExcel = exportToExcel;
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            color: #4b0082;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #6a1b9a;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 2px solid #4b0082;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #6a1b9a;
+            color: white;
+        }
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #6a1b9a;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #4b0082;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-buttons">
+        <button onclick="location.href='home.html'">العودة للتسجيل</button>
+        <button onclick="exportToExcel()">تحميل Excel</button>
+    </div>
+
+    <div class="container">
+        <h1>كشف حركات النقدية</h1>
+        <table id="cashTable">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>BSS</th>
+                    <th>إضافة We Pay</th>
+                    <th>سحب We Pay</th>
+                    <th>سحب Visa</th>
+                    <th>Refund</th>
+                    <th>سحوبات أخرى</th>
+                    <th>الإجمالي</th>
+                    <th>المستخدم</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</body>
+</html>
