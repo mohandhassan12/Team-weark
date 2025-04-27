@@ -1,0 +1,99 @@
+  /* التنسيقات العامة */
+  :root {
+    --main-color: #6a1b9a;
+    --secondary-color: #9c27b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Tahoma', sans-serif;
+    background: #f8f0ff;
+    line-height: 1.6;
+}
+
+/* الهيدر */
+.header {
+    background: var(--main-color);
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header .logo {
+    width: 120px;
+}
+
+.header .welcome {
+    font-size: 1.2rem;
+}
+
+.header a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+/* روابط الصفحة */
+.links-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem;
+    margin-top: 2rem;
+}
+
+.link-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.link-card i {
+    font-size: 2rem;
+    color: var(--main-color);
+    margin-bottom: 1rem;
+}
+
+.link-card a {
+    text-decoration: none;
+    color: var(--main-color);
+    font-size: 1.1rem;
+}
+
+/* زر تبديل الوضع */
+.toggle-btn {
+    background: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* فوتر */
+.footer {
+    background: var(--main-color);
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 3rem;
+}
